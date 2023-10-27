@@ -1,0 +1,115 @@
+//////////////////////////
+/// USING MODULES (2023-10-27)
+//////////////////////////
+NOTES:
+
+  1. including the module
+
+    const fs = require('fs');
+
+    // visite the documentation for lot of details. 
+
+//////////////////////////
+/// READING AND WRITING FILES SYNC (2023-10-27)
+//////////////////////////
+NOTES:
+
+  const fs = require('fs');
+
+  1. Reading a file sync
+    const textInput = fs.readFileSync('./path/to/file.txt' , 'utf-8');
+
+  2. Writing a file sync
+    fs.writeFileSync('./path/to/file.txt' , 'text to write');
+
+//////////////////////////
+/// BLOCKING AND NON BLOCKING (2023-10-27)
+//////////////////////////
+NOTES:
+
+  // Node has only one thread for all users. 
+    // uses a different method for asynchronous execution.
+
+  // PHP has different thread's for different users.
+
+//////////////////////////
+/// READING AND WRITING FILES ASYNC (2023-10-27)
+//////////////////////////
+NOTES:
+
+  // as soon as the file is ready , callback function will run
+
+  1. Reading file 
+    const fs = require('fs');
+    fs.readFile('path/to/file' , 'utf-8', (err , data) => {
+      if(err) return console.log("Error happened");
+      console.log(data);
+    })
+
+  2. Writing file
+    const fs = require('fs');
+    fs.writeFile('path/to/file' , 'data to write', 'utf-8' , err => {
+      console.log("file written");
+    });
+
+  3. Callback hell
+
+    fs.readFile('path/to/file' , 'utf-8', (err , data) => {
+      if(err) return console.log("Error happened");
+      fs.readFile('path/to/file' , 'utf-8', (err , data) => {
+        fs.readFile('path/to/file' , 'utf-8', (err , data) => {
+          fs.writeFile('path/to/file' , 'data to write', 'utf-8' , err => {
+            console.log("file written");
+          });      
+        })
+      })
+    })
+
+//////////////////////////
+/// CREATING A WEB SERVER (2023-10-27)
+//////////////////////////
+NOTES:
+
+  const http = require('http');
+  const server = http.createServer((req , res) => {
+    res.end('hello from the server');
+  })
+  server.listen(8000, '127.0.0.1' , () => {
+    console.log('listening to port 8000');
+  });
+
+//////////////////////////
+/// ROUTING (2023-10-27)
+//////////////////////////
+NOTES:
+
+  const url = require('url');
+
+  // convert /overview?id=23&name=leo
+  // into a nicely formated object;
+
+  const http = require('http');
+  const server = http.createServer((req , res) => {
+    const pathName = req.url; 
+    if(pathName == '/' || pathName == '/overview') {
+      res.end('this is the overview');
+    } else if(pathName = '/product') {
+      res.end('this is the product');
+    } else {
+      res.writeHead(404 , {
+        'Content-type': 'text/html',
+      });
+      res.end('page not found');
+    }
+    res.end('hello from the server');
+  })
+  server.listen(8000, '127.0.0.1' , () => {
+    console.log('listening to port 8000');
+  });
+
+
+
+
+
+
+
