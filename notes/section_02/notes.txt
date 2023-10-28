@@ -107,9 +107,166 @@ NOTES:
     console.log('listening to port 8000');
   });
 
+//////////////////////////
+/// BUILDING SIMPLE API (2023-10-28)
+//////////////////////////
+NOTES:
 
+  const data = fs.readFileSync(`${__dirname}/path/to/file` , 'utf-8');
+  const someData = JSON.parse(data);
 
+  const http = require('http');
+  http.createServer((req , res) => {
+    const pathName = req.url; 
+    if(pathName == '/' || pathName == '/overview') {
+      res.end('this is the overview');
+    } else if(pathName = '/api') {  
+      res.writeHead(200 , {
+        'Content-type': 'application/json'
+      })
+      res.end(someData); 
+    } else {
+      res.writeHead(404 , {
+        'Content-type': 'text/html',
+      });
+      res.end('page not found');
+    }
+    res.end('hello from the server');
+  }).listen(8000, '127.0.0.1' , () => {
+    console.log('listening to port 8000');
+  });
 
+//////////////////////////
+/// HTML TEMPLATING (2023-10-28)
+//////////////////////////
+NOTES:
 
+  /templates/product.html
 
+  // change the data part to {%PRODUCTNAME%}
 
+  // you can even change the html within html with this. 
+
+//////////////////////////
+/// HTML FILLING THE TEMPLATE (2023-10-28)
+//////////////////////////
+NOTES:
+
+  1. read the data and template files.
+
+    const data = fs.readFileSync(`${__dirname}/dev-data/data.json`);
+    const dataObj = JSON.parse(data);
+    const templateCard = fs.readFileSync(
+      `${__dirname}/templates/template-card.html`
+    );
+    const templateOverview = fs.readFileSync(
+      `${__dirname}/templates/template-overview.html`
+    );
+    const templateProduct = fs.readFileSync(
+      `${__dirname}/templates/template-product.html`
+    );
+
+  2. map over the dataObj. 
+
+    const cardsHtml = dataObj.map((el) => replaceTemplate(templateCard, el)).join("");
+    const output = templateOverview.replace("{%PRODUCT_CARDS%}", cardsHtml);
+    res.end(output);
+
+  3. replaceTemplate() function.
+
+    function replaceTemplate(temp, product) {
+      let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
+      output = output.replace(/{%IMAGE%}/g, product.image);
+      output = output.replace(/{%PRICE%}/g, product.price);
+      output = output.replace(/{%FROM%}/g, product.from);
+      output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
+      output = output.replace(/{%QUANTITY%}/g, product.quantity);
+      output = output.replace(/{%DESCRIPTION%}/g, product.description);
+      if (!product.organic) output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
+      output = output.replace(/{%ID%}/g, product.id);
+      return output;
+    }
+
+//////////////////////////
+/// PARCING VALUES FROM URL (2023-10-28)
+//////////////////////////
+NOTES:
+
+  const url = require('url');
+
+  const server = http.createServer((req , res) => {
+    const {pathName , query} = url.parse(req.url , true);
+    const product = dataObj[query.id];
+    res.end('one');
+  })
+
+//////////////////////////
+/// USING YOUR OWN MODULE (2023-10-28)
+//////////////////////////
+NOTES:
+
+  1. create a folder:
+    /modules
+
+  2. inside it create your module file. 
+    /modules/replaceTemplate.js
+
+  3. write your code. 
+    module.exports = () => {
+      console.log('hello');
+    }
+
+  4. using that file 
+    const someFunction = require('./module/replaceTemplate.js');
+
+//////////////////////////
+/// ABOUT NPM (2023-10-28)
+//////////////////////////
+NOTES:
+
+  1. when we start a new project. 
+  npm init 
+
+  // Two types of packages
+  // Simple dependency OR development dependency
+
+  // Regular dependency 
+  // a package for more good loking url
+  npm install slugify 
+
+  // Develop dependency
+  // Code bundler , Webpack 
+  npm install nodemon --save-dev
+
+  // Global dependency
+  npm i nodemon --global 
+  nodemon index.js
+
+  // If we are using local dev dependency we need to use script
+  "scripts": {
+    "start": "nodemon index.js"
+  }
+  npm run start
+
+//////////////////////////
+/// USING 3RD MODULES (2023-10-28)
+//////////////////////////
+NOTES:
+
+  // we use slugify to convert /products?id=5 => /products/fresh
+  const slugify = reqire('slugify');
+
+  console.log(slugify('leo leo' , {lower: true}))
+  const slugs = dataObj.map(e => slugify(e.productName , {lower: true}))
+  // Leo Leo => leo-leo
+
+//////////////////////////
+/// ABOUT VERSION NUMBERS (2023-10-28)
+//////////////////////////
+NOTES:
+
+  "^1.15.8"
+  major().minor(new features = backward compatible).patch(fix bugs)
+  ^ => if the package updates when we should update in our project
+  ~ => we do not want minor release. 
+  * => includes all the versions 
