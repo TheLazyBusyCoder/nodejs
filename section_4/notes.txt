@@ -1,0 +1,65 @@
+// to change the number of threads 
+// by default 4
+process.env.UV_THREADPOOL_SIZE = 1
+
+//////////////////////////
+/// EVENT EMMITERS (2024-01-23)
+//////////////////////////
+NOTES:
+
+    // Observer patterns
+
+    const EventEmmiter = require('fs');
+
+    const myem = new EventEmmiter();
+
+    myem.on('someEventName' , (para) => {});
+
+    myem.emit('someEventName' , 12);
+
+    // example
+
+    const server = http.createServer();
+
+    server.on('request',(req , res) => {});
+    server.on('close' , () => {});
+
+//////////////////////////
+/// STEAMS (2024-01-23)
+//////////////////////////
+NOTES:
+
+    Solution 2
+
+    const readable = fs.createReadStream('filename');
+    readable.on('data' , chunk => {
+        res.write(chunk);
+    });
+
+    readable.on('end' , () => {
+        res.end();
+    })
+
+    Solution 3
+
+    const readable = fs.createReadStream('filename');
+    readable.pipe(res);
+
+//////////////////////////
+/// MODULE.EXPORTS (2024-01-23)
+//////////////////////////
+NOTES:
+
+module.exports = SomeVariable
+
+exports.someProperty = someVariable
+exports.someProperty1 = someVariable1
+
+
+
+
+
+
+
+
+
