@@ -1,6 +1,6 @@
 ## NodeJs Notes.
 
-<h2>Section 1</h2>
+<h2>Section 2</h2>
 <ul>
   <li>Using Modules</li>
   <li>Reading and Writing files (sync)</li>
