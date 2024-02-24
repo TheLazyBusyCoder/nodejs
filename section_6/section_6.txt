@@ -1,0 +1,273 @@
+//////////////////////////
+/// FOLDER STRUCTURE (2024-02-24)
+//////////////////////////
+NOTES:
+
+/controller
+../tourController.js
+../userController.js
+/public
+../css/
+../imgs/
+../favicon
+../js/
+/routes
+../userRouter.js
+app.js
+server.js
+
+/////////////////////////////
+/// EXPRESS
+
+////////////////////////
+/// SETUP
+
+    npm i express
+
+    /app.js
+
+    const express = require("express");
+
+    const app = express();
+
+    app.get("/", (req, res) => {
+        res.status(200).send("hello");
+    });
+
+    app.listen(3000, () => {
+        console.log("server started");
+    });
+
+    // TO SEND JSON DATA
+
+        res.status(200).json({ name: "leo" });
+
+    // POST + GET REQUEST
+
+        app.get("/", (req, res) => {});
+        app.post('/', (req, res') => {});
+
+////////////////////////////
+/// URL THEORY  (RESTFULL API'S)
+
+    /addNewTour     =>  PUSH /tours
+    /getTour        =>  GET /tours/id
+    /updateTour     =>  UPDATE /tours/id
+    /deleteTour     =>  DELETE /tours/id
+
+    /getToursByUser => GET /users/3/tours
+
+    // Before sending the json data reformat it with: 
+
+    {
+        "status":"",
+        "data":{}
+    }
+
+/////////////////////////////
+/// TO READ POST REQUEST DATA
+
+    const app = express();
+    app.use(express.json());    // middleware
+
+    console.log(req.body);  // it will have json data.
+    res.send('Done');
+
+    // TO MERGE 2 OBJECTS
+        Object.assign({one:1},{two:2});
+
+//////////////////////////////////
+/// RESPONDING TO URL PARAMETERS
+
+    /tours/1
+
+    app.get('/tours/:id/:x/:y/:z', (req, res) => {
+        console.log(req.params);    // to acces all the parameters
+    })
+
+    // url: /tours/1/2/3/4
+
+    // TO MAKE URL OPTIONAL 
+            - even if the parameter is not there the code will work. 
+        '/tours/:id/:x/:y/:z?'
+
+//////////////////////////
+/// PATCH REQUEST
+
+    - update only properties, not full object. 
+
+    app.patch('url', (req, res) => {
+        
+    });
+
+/////////////////////////////////
+/// REFACTORING ROUTES
+
+    const fun = function(req, res) {
+
+    }
+
+    app.get('', fun);
+
+    // Even Better
+
+    app.route('/').get(fun).post(fun2).patch(fun3);
+
+////////////////////////////////////
+/// MIDDLEWARE
+
+    - all the middleware we use is middleware stack. 
+
+    app.use((req, res, next) => {
+        console.log('hello');
+        next();
+    });
+
+    app.use('url',(req, res, next) => {
+        console.log('hello');
+        next();
+    });
+
+    npm i morgan // to see request data in terminal. 
+
+    app.use(morgan('dev'));
+
+///////////////////////////
+///// SEPERATING ROUTES
+
+    app.use('api/v1/tours/', Xroutes);
+    const Xroutes = express.Router();
+    Xroutes.route('/:id').get(fun).post(fun1);
+
+    app.use('api/v1/users/, Xroutes);
+    const Yroutes = express.Router();
+    Yroutes.route('/:id').get(fun).post(fun1);
+
+    // you have to use / as the main route has been added. 
+
+//////////////////////
+/// FILE STRUCTURE
+
+    1) For the routes. 
+        /routes
+        ../tourRoutes.js
+        ../userRoutes.js
+
+        - Everything should be inside that file. 
+
+        tourRoutes.js:
+
+        const express = require('express');
+        const router = express.Router();
+        router.route('/:id').get(fun).post(fun1);
+        module.exports = router;
+
+        app.js: 
+
+        const tourRoutes = require(`${__dirname}/routes/tourRoutes.js`);
+        app.use("api/v1/tours/",tourRoutes);
+
+    2) For the routes function (controllers):
+
+        /controllers
+        ../tourCountroller.js
+
+        tourController.js:
+
+        create functions then to export: 
+
+        exports.funName = () => {};
+
+        tourRouters.js:
+
+        const tourController = require("pathtocontroller/tourController.js);
+
+        router.route('').get(tourController.getTours);
+
+    3) Create Server
+
+        ./app.js    (stuff related to express)
+
+        module.exports = app;
+
+        ./server.js (stuff related to server) (database etc)
+
+        const app = require('path');
+
+        app.listen(3000 , () => {
+            
+        })
+
+    4) running 
+
+        start": "nodemon server.js"
+
+///////////////////////
+//// PARAM MIDDLEWARE   
+
+    - a middleware that only runs if a parameter is present in the url
+    : ex: turns/:id
+
+    router.param('id', (req, res, next, val) => {
+        console.log(val);
+        next();
+    })
+
+//////////////////////////
+/// CHANING MIDDLE WARE FUNCTION (2024-02-24)
+//////////////////////////
+NOTES:
+
+    simple:
+
+    router.route('/').get(fun).post(fun1, fun2);
+
+//////////////////////////
+/// SERVING STATIC FILES (2024-02-24)
+//////////////////////////
+NOTES:
+
+    - workes only for static files, 
+    - first will check if there exist a route defined, if not then it will search in public folder. 
+
+    app.use(express.static('/public/'));
+
+//////////////////////////
+/// ENVIRONMENT VAR (2024-02-24)
+//////////////////////////
+NOTES:
+
+    console.log(app.get('env'));    // to get the deafult environment
+    console.log(process.evn);
+
+    // To set some variables when starting the server. 
+    NODE_ENV=development X=5 nodemon server.js
+
+    config.env
+
+    put all the environment varialbles in this. 
+
+    npm i dotenv
+
+    server.js/
+    const dotenv = require('dotenv');
+    dotenv.config({path: './config.env'});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
