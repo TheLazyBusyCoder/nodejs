@@ -1,0 +1,19 @@
+//////////////////////////
+/// MONGODB (2024-03-01)
+//////////////////////////
+NOTES:
+
+collections = tables. 
+documents = rows. 
+
+document: 
+
+{
+    "id": 1234312,
+    "title" "leo",
+    "length": 456,
+    "comments": [
+        {..some data},
+        {..some data}
+    ]
+}
